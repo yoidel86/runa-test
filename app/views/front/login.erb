@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Marktdaten</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'font-awesome.min', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <style>
+    @font-face{
+      font-family:'RopaSans';
+      src:url("<%=asset_path("RopaSans-Regular.ttf")%>");
+    }
+    body{
+      font-family: RopaSans, serif;
+    }
+    @font-face{
+      font-family:'FontAwesome';
+      src:url('<%=asset_path "fontawesome-webfontd.eot" %>');
+      src:url('<%=asset_path "fontawesome-webfontd.eot" %>') format('embedded-opentype'),
+      url('<%=asset_path "fontawesome-webfont.woff" %>') format('woff'),
+      url('<%=asset_path "fontawesome-webfont.ttf" %>') format('truetype'),
+      url('<%=asset_path "fontawesome-webfont.svg" %>')
+      format('svg');font-weight:normal;font-style:normal
+    }
+
+  </style>
+</head>
+<body style="background-color:transparent" >
+<div id="content">
+
+
+<div class="d-flex align-items-center justify-content-center bg-br-primary ht-100v">
+
+  <div class="login-wrapper wd-300 wd-xs-350 pd-25 pd-xs-40 bg-white rounded shadow-base">
+    <div class="signin-logo tx-center tx-28 tx-bold tx-inverse"><span class="tx-normal">[</span> runat <span class="tx-info">test</span> <span class="tx-normal">]</span></div>
+    <div class="tx-center mg-b-60">Web client to runa-test api</div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Enter your username" name="username" id="id_username">
+    </div><!-- form-group -->
+    <div class="form-group">
+      <input type="password" class="form-control" placeholder="Enter your password" name="password" id="id_password">
+      <br>
+      <a href="" class="tx-info tx-12 d-block mg-t-10">Forgot password?</a>
+    </div><!-- form-group -->
+    <button type="submit" class="btn btn-info btn-block" id="id_submit">Sign In</button>
+    <input type="hidden" name="next" value="/">
+    <div class="mg-t-60 tx-center">Not yet a member? <a href="" class="tx-info">Sign Up</a></div>
+  </div><!-- login-wrapper -->
+</div>
+</div>
+<script>
+    var routes = [];
+    routes["login"] = "<%=auth_login_path %>";
+    routes["index"] = "<%=index_url %>";
+    routes["users"] = "<%=api_users_path %>";
+    routes["create"] = "<%=auth_create_url %>";
+
+  $(function(){
+      //if all ready logged in then load dashboard
+      if(sessionStorage.getItem("auth_token")){
+
+          loadIndex("#content");
+      }
+      //login using auth/login to get jwt
+      $("#id_submit").click(function(){
+          var email = $("#id_username").val();
+          var password = $("#id_password").val();
+          $.post(routes["login"],{"email":email,"password":password},function(token){
+              sessionStorage.setItem("auth_token",token.auth_token);
+              //load index view
+              loadIndex("#content");
+          })
+      })
+  })
+</script>
+
+</body>
+</html>

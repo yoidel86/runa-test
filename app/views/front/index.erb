@@ -1,1 +1,254 @@
-FRONT-END to load client
+<!-- Header -->
+<header class="navbar main-header">
+  <a class="navbar-brand" href="index.html">
+    Runa
+  </a>
+
+  <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user_name %></a>
+      <ul class="dropdown-menu">
+        <li><a href="#"><i class="fa fa-bar-chart-o"></i> Reportes</a></li>
+        <li><a href="#"><i class="fa fa-user"></i> Perfil</a></li>
+        <li><a href="#"><i class="fa fa-share"></i> Salir</a></li>
+      </ul>
+    </li>
+  </ul>
+</header>
+
+
+<div class="sidebar sidebar-left">
+  <div class="content">
+    <div class="tab-content sidetabs">
+      <div class="tab-pane active" id="home">
+        <ul class="sidemenu">
+          <li class="active">
+            <a href="index.html">
+              <span class="icon"><i class="fa fa-dashboard"></i></span>
+              <span class="name">Dashboard</span>
+              <span class="number pull-right"><span class="label label-primary">5</span></span>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0);">
+              <span class="icon"><i class="fa fa-chain"></i></span>
+              <span class="name">Entrada-Salida</span>
+
+            </a>
+
+          </li>
+          <li>
+            <a href="javascript:void(0);">
+              <span class="icon"><i class="fa fa-bar-chart-o"></i></span>
+              <span class="name">Reportes</span>
+            </a>
+          </li>
+          <li>
+            <a href="#usuarios" id="load_users">
+              <span class="icon"><i class="fa fa-user"></i></span>
+              <span class="name">Usuarios</span>
+
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Header -->
+
+<section id="main-wrapper">
+  <h3 class="subtitle">Dashboard</h3>
+  <hr/>
+ <div class="dashboard_content">
+    <div class="row">
+      <div class="col-sm-3">
+
+        <div class="easypiechart" id="chart1" data-percent="75">
+          <div class="text">$551 <h4>Expenses</h4></div>
+        </div>
+
+      </div>
+      <div class="col-sm-3">
+
+        <div class="easypiechart" id="chart2" data-percent="58">
+          <div class="text">2270 <h4>Visitors</h4></div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+
+        <div class="easypiechart" id="chart3" data-percent="88">
+          <div class="text">$1350 <h4>Earning</h4></div>
+        </div>
+
+      </div>
+
+      <div class="col-sm-3">
+
+        <div class="tile purple-tile">
+          <div class="main-icon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <h4 class="white">Friday, Aug 13</h4>
+        </div>
+
+        <div class="tile green-tile">
+          <div class="main-icon">
+            <i class="fa fa-clock-o"></i>
+          </div>
+          <h4 class="white">04:00 PM</h4>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div id='spline-chart'></div>
+      </div>
+
+      <div class="col-md-4">
+
+        <div class="panel panel-default control-panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">Settings</h3></div>
+          <div class="panel-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-6 control-label">Bluetooth</label>
+                <div class="col-sm-6 pull-right">
+                  <input type="checkbox" class="js-switch-blue" checked />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-6 control-label">Wifi</label>
+                <div class="col-sm-6 pull-right">
+                  <input type="checkbox" class="js-switch-green" checked />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-6 control-label">Location Services</label>
+                <div class="col-sm-6 pull-right">
+                  <input type="checkbox" class="js-switch-teal" checked />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-6 control-label">Cellular Data</label>
+                <div class="col-sm-6 pull-right">
+                  <input type="checkbox" class="js-switch-sky" checked />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div><!--col-md-4-->
+    </div><!-- row-->
+
+    <div class="row">
+      <div class="col-md-4 col-lg-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Server status</h3>
+          </div>
+          <div class="panel-body">
+
+            <p>Memory usage</p>
+            <div class="progress">
+              <div class="progress-bar progress-bar-default" style="width: 60%">60%</div>
+            </div>
+
+            <p>CPU usage</p>
+            <div class="progress">
+              <div class="progress-bar progress-bar-danger" style="width: 85%">85%</div>
+            </div>
+
+            <p>Storage space</p>
+            <div class="progress">
+              <div class="progress-bar progress-bar-success" style="width: 40%">40%</div>
+            </div>
+
+            <p>Apps installed</p>
+            <div class="progress">
+              <div class="progress-bar progress-bar-primary" style="width: 55%">55%</div>
+            </div>
+
+            <p>Bandwidth</p>
+            <div class="progress">
+              <div class="progress-bar progress-bar-warning" style="width: 50%">50%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-lg-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Notifications</h3>
+          </div>
+          <div class="panel-body">
+
+            <div class="alert alert-success">
+              <strong class="default"><i class="fa fa-road"></i> Well done,</strong> You have finished job!
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>
+            <div class="alert alert-info">
+              <strong class="default"><i class="fa fa-user"></i> John</strong> sent you friend request.
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>
+            <div class="alert alert-warning">
+              <strong class="default"><i class="fa fa-envelope-o"></i> Sam</strong> sent important mail.
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>
+            <div class="alert alert-danger">
+              <strong class="default"><i class="fa fa-hdd-o"></i> Server </strong> reported problems.
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>
+
+            <div class="alert alert-info nomargin">
+              <strong class="default"><i class="fa fa-money"></i> Received </strong> $1826 from client.
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="col-md-4 col-lg-4">
+        <div class="weather-widget">
+          <div class="row widget1">
+            <div class="col-xs-6 left">
+              <p class="icon-middle"><i class="wi-snow"></i></p>
+            </div>
+            <div class="col-xs-6 right">
+              <p class="text-middle">58°F</p>
+              <p class="text-location">Chicago</p>
+            </div>
+          </div>
+          <br>
+          <div class="row widget2">
+            <div class="col-xs-6 left">
+              <p class="text-middle">72°F</p>
+              <p class="text-location">San Francisco</p>
+            </div>
+            <div class="col-xs-6 right">
+              <p class="icon-middle"><i class="wi-strong-wind"></i></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ </div>
+
+
+</section>
+
+<script>
+  $(function(){
+      loadCharts();
+    $("#load_users").click(loadUsers);
+  })
+</script>
+

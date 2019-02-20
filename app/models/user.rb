@@ -1,3 +1,4 @@
+# defining User Model
 class User < ApplicationRecord
   has_secure_password
   # model association

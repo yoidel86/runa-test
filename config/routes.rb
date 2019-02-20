@@ -7,10 +7,15 @@ Rails.application.routes.draw do
 
   get 'api/users'
 
-  get 'front/index'
+  get '/api/notlogedusers'
+
+  get '/api/logedusers'
+
+  get 'index'=>"front#index"
+  get 'login'=>"front#login"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root "front#index"
+  root "front#login"
   post 'auth/login', to: 'authentication#authenticate'
   post 'auth/create', to: 'authentication#create'
 

@@ -1,4 +1,4 @@
-
+# controller to authenticate an create users on api
 class AuthenticationController < ApplicationController
   skip_before_action :authenticate_request
 
@@ -14,7 +14,7 @@ class AuthenticationController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      render json: @user, status: :created
+      render 'authentication/user'
     else
       render json: { errors: @user.errors.full_messages },
              status: :unprocessable_entity
@@ -22,9 +22,10 @@ class AuthenticationController < ApplicationController
   end
 
   private
+
   def user_params
     params.permit(
-        :name, :email, :password, :password_confirmation
+      :name, :email, :password, :password_confirmation
     )
   end
 end

@@ -1,0 +1,13 @@
+AllCops:
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+Metrics/LineLength:
+  Max: 120
+Metrics/MethodLength:
+  Max: 15
+Metrics/BlockLength:
+    Max: 40
+Style/EndOfLine:
+  EnforcedStyle: lf

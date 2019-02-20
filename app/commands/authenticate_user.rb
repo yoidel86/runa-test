@@ -1,3 +1,4 @@
+# command to execute user authentication
 class AuthenticateUser
   prepend SimpleCommand
 
