@@ -90,6 +90,7 @@ function loadUsers(){
         }
     });
 }
+
 function addUser(){
     var name = $("#name").val();
     var email = $("#email").val();
@@ -162,16 +163,20 @@ function loadLoginLogoutView(){
     $(".dashboard_content").html(`
         <div class="row">
             <div class="col-md-12">
-                <div id="logged_in_users"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
+            <h4>Usuarios que no han entrado</h4>
                 <div id="not_logged_users"></div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
+             <h4>Usuarios que no han salido</h4>
+                <div id="logged_in_users"></div>
+            </div>
+        </div>
+       
+        <div class="row">
+            <div class="col-md-12">
+            <h4>Usuarios que ya entraron y salieron</h4>
                  <div id="full_logged_users"></div>
             </div>
         </div>
@@ -180,6 +185,7 @@ function loadLoginLogoutView(){
     loadNotLoggedDayUsers();
     loadFullLoggedDayUsers();
 }
+
 function loadLoggedInUsers(){
     $.ajax({
         url: routes["loggedUsers"],
@@ -189,9 +195,29 @@ function loadLoggedInUsers(){
         },
         success: function (content) {
             console.log(content);
+            var table_content = ``;
+            $.each(content.users,function(i,val){
+                table_content += `<tr><td>${val.name}</td><td>${val.email}</td><td>${val.time_in}</td>
+                    <td><a href="#userregister" class="logout_user" data-id="${val.id}" data-user="${val.user_id}">Salida</a></td>
+                    </tr>`;
+            });
+            var userTable = `
+                <table class="table">
+                <thead><th>Nombre</th><th>Correo</th><th>Hora entrada</th><th>Registrar</th></thead>
+                <tbody id="users_body">${table_content}</tbody>
+                </table>
+                <br>
+                             
+            `;
+
+            $("#logged_in_users").html(userTable);
+            $(".logout_user").click( function(){
+                loggoutUser($(this).data("id"),$(this).data("user"));
+            });
         }
     });
 }
+
 function loadNotLoggedDayUsers(){
     $.ajax({
         url: routes["notLoggedUsers"],
@@ -213,29 +239,17 @@ function loadNotLoggedDayUsers(){
                 <tbody id="users_body">${table_content}</tbody>
                 </table>
                 <br>
-                <div class="btn btn-info" id="add_user"> Crear Usuario </div>
-                
             `;
 
             $("#not_logged_users").html(userTable);
             $(".login_user").click(function(s){
                 console.log($(this).data("id"));
+                logginUser($(this).data("id"));
             })
         }
     });
 }
-function logginUser(id){
-    $.ajax({
-        url: routes["api_login"]+id,
-        type: "POST",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
-        },
-        success: function (content) {
-            console.log(content)
-        }
-    });
-}
+
 function loadFullLoggedDayUsers(){
     $.ajax({
         url: routes["dayLoggedUsers"],
@@ -244,8 +258,49 @@ function loadFullLoggedDayUsers(){
             xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
         },
         success: function (content) {
-            console.log(content);
+            var table_content = ``;
+            $.each(content.users,function(i,val){
+                table_content += `<tr><td>${val.name}</td><td>${val.email}</td>
+                    <td>${val.time_in}</td>
+                    <td>${val.time_out}</td>
+                    </tr>`;
+            });
+            var userTable = `
+                <table class="table">
+                <thead><th>Nombre</th><th>Correo</th><th>Hora Entrada</th><th>Hora Salida</th></thead>
+                <tbody id="users_body">${table_content}</tbody>
+                </table>
+                <br>          
+            `;
 
+            $("#full_logged_users").html(userTable);
+
+        }
+    });
+}
+
+function logginUser(id){
+    $.ajax({
+        url: routes["api_login"]+id,
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
+        },
+        success: function (content) {
+            loadLoginLogoutView();
+        }
+    });
+}
+
+function loggoutUser(id,userid){
+    $.ajax({
+        url: routes["api_logout"]+`${userid}/${id}`,
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
+        },
+        success: function (content) {
+            loadLoginLogoutView();
         }
     });
 }

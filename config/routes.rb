@@ -13,7 +13,8 @@ Rails.application.routes.draw do
   get 'api/not_logged_users'
   get 'api/logged_users'
   get 'api/day_logged_users'
-
+  get 'api/get_user_reports'
+  post 'api/save_report'
   get 'index'=>"front#index"
   get 'login'=>"front#login"
 

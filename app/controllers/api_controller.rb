@@ -25,8 +25,6 @@ class ApiController < ApplicationController
     if @log
       @log.timeout = Time.current
       if @log.save
-        puts "log out funciona correctamente"
-        p @log
         render json: @log, status: 200
       else
         render json: { errors: @log.errors.full_messages },
@@ -43,13 +41,14 @@ class ApiController < ApplicationController
       start_date = params[:start_date].to_date if params[:start_date]
       end_date = Date.tomorrow
       end_date = params[:end_date].to_date if params[:end_date]
+
       @logs = param_user.logs.where(date: start_date..end_date) unless param_user.nil?
     end
     render 'api/logs.json'
   end
 
   def logged_users
-    @logs = Log.includes(:user).where(date: Date.today).where(timeout:nil)
+    @logs = Log.includes(:user).where(date: Date.today).where(timeout: nil)
     render 'api/user_log.json'
   end
 
@@ -58,16 +57,27 @@ class ApiController < ApplicationController
     render 'api/users.json'
   end
   def day_logged_users
-    @logs = Log.includes(:user).where(date: Date.today).where.not(timeout:nil)
+    @logs = Log.includes(:user).where(date: Date.today).where.not(timeout: nil)
     render 'api/user_log.json'
   end
   def users
     @users = User.includes(:logs).all
     render 'api/users.json'
   end
-
+  def save_report
+    @logs = param_user.logs.where(date: params[:start_date].to_date..params[:end_date].to_date) unless param_user.nil?
+    @report = Reporte.create(date:Date.today,user_id:param_user.id,from:params[:start_date],to:params[:end_date],result:@logs.as_json)
+    if @report.save
+      return render 'api/report.json'
+    else
+      return render json: { errors: @report.errors.full_messages }, status:200
+    end
+  end
+  def get_user_reports
+    @reports =param_user.reportes
+    render json:@reports
+  end
   private
-
   def param_user
     if params[:user_id]
       user = User.find(params[:user_id])
