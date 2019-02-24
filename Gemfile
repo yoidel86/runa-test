@@ -35,18 +35,22 @@ gem 'sass-rails', '~> 5.0'
 gem 'simple_command'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'apipie-rails'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rails_best_practices'
   gem 'rspec-rails', '~> 3.5'
   gem 'rubocop', git: 'https://github.com/rubocop-hq/rubocop.git', require: false
+  gem 'sdoc'
+  gem 'swagger-docs'
+  # gem 'rspec_api_documentation'
 end
 
 group :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.0'
   gem 'faker'
-  gem 'simplecov'
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'simplecov'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

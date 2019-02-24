@@ -1,15 +1,18 @@
 Rails.application.routes.draw do
+  apipie
+  get 'api' => redirect('/swagger/dist/index.html?url=/apidocs/api-docs.json')
+
   get 'api/login/:user_id'=>"api#login"
 
   get 'api/logout/:user_id/:log_id'=>"api#logout"
 
-  get 'api/userlogs/:user_id'=>"api#userlogs"
+  get 'api/user_logs/:user_id'=>"api#user_logs"
 
   get 'api/users'
 
-  get '/api/notlogedusers'
-
-  get '/api/logedusers'
+  get 'api/not_logged_users'
+  get 'api/logged_users'
+  get 'api/day_logged_users'
 
   get 'index'=>"front#index"
   get 'login'=>"front#login"

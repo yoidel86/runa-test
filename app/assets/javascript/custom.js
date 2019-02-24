@@ -16,7 +16,6 @@ var dialog_form = `<div id="dialog-form" title="Crear nuevo usuario">
                   </form>
                 </div>`;
 
-
 function loadIndex(load_to) {
     $.ajax({
         url: routes["index"],
@@ -26,10 +25,11 @@ function loadIndex(load_to) {
         },
         success: function (content) {
             $(load_to).html(content);
+            // $("#load_users").click(loadUsers);
         }
     });
 }
-
+//users manager
 function loadUsers(){
     $.ajax({
         url: routes["users"],
@@ -38,7 +38,8 @@ function loadUsers(){
             xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
         },
         success: function (content) {
-            console.log(content)
+            $("li.active").removeClass("active");
+            $("#load_users").parent().addClass("active");
             $(".subtitle").html("USUARIOS");
             var table_content = ``;
             $.each(content.users,function(i,val){
@@ -81,6 +82,7 @@ function loadUsers(){
                         }
                     ]
             });
+
             $("#add_user").click(function(){
                 dialog.dialog( "open" );
             })
@@ -108,8 +110,10 @@ function addUser(){
         }}
     );
 }
+//dashboard view
 function loadCharts(){
     console.log("ESTO NO SE LLAMA NUNCA");
+
     $('#chart1').easyPieChart({
         size:180,
         barColor:'#3ba0ff',
@@ -127,6 +131,7 @@ function loadCharts(){
         barColor:'#ff6c60',
         lineWidth:5,
     });
+
     window.chart = c3.generate({
         bindto: '#spline-chart',
         data: {
@@ -147,6 +152,101 @@ function loadCharts(){
         size: {
             height: 300
         },
+    });
+}
+//login-logout view
+function loadLoginLogoutView(){
+    $(".subtitle").html("Registro de Entrada y Salida");
+    $("li.active").removeClass("active");
+    $("#entrada_salida").parent().addClass("active");
+    $(".dashboard_content").html(`
+        <div class="row">
+            <div class="col-md-12">
+                <div id="logged_in_users"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="not_logged_users"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                 <div id="full_logged_users"></div>
+            </div>
+        </div>
+    `);
+    loadLoggedInUsers();
+    loadNotLoggedDayUsers();
+    loadFullLoggedDayUsers();
+}
+function loadLoggedInUsers(){
+    $.ajax({
+        url: routes["loggedUsers"],
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
+        },
+        success: function (content) {
+            console.log(content);
+        }
+    });
+}
+function loadNotLoggedDayUsers(){
+    $.ajax({
+        url: routes["notLoggedUsers"],
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
+        },
+        success: function (content) {
+            console.log(content);
+            var table_content = ``;
+            $.each(content.users,function(i,val){
+                table_content += `<tr><td>${val.name}</td><td>${val.email}</td>
+                    <td><a href="#userregister" class="login_user" data-id="${val.id}">Entrada</a></td>
+                    </tr>`;
+            });
+            var userTable = `
+                <table class="table">
+                <thead><th>Nombre</th><th>Correo</th><th>Registrar</th></thead>
+                <tbody id="users_body">${table_content}</tbody>
+                </table>
+                <br>
+                <div class="btn btn-info" id="add_user"> Crear Usuario </div>
+                
+            `;
+
+            $("#not_logged_users").html(userTable);
+            $(".login_user").click(function(s){
+                console.log($(this).data("id"));
+            })
+        }
+    });
+}
+function logginUser(id){
+    $.ajax({
+        url: routes["api_login"]+id,
+        type: "POST",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
+        },
+        success: function (content) {
+            console.log(content)
+        }
+    });
+}
+function loadFullLoggedDayUsers(){
+    $.ajax({
+        url: routes["dayLoggedUsers"],
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
+        },
+        success: function (content) {
+            console.log(content);
+
+        }
     });
 }
 

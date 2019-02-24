@@ -30,7 +30,7 @@
             </a>
           </li>
           <li>
-            <a href="javascript:void(0);">
+            <a href="#entrada-salida" id="entrada_salida">
               <span class="icon"><i class="fa fa-chain"></i></span>
               <span class="name">Entrada-Salida</span>
 
@@ -248,7 +248,8 @@
 <script>
   $(function(){
       loadCharts();
-    $("#load_users").click(loadUsers);
+      $("#load_users").click(loadUsers);
+      $("#entrada_salida").click(loadLoginLogoutView);
   })
 </script>
 

@@ -2,6 +2,12 @@
 class ApiController < ApplicationController
   before_action :validate_admin
 
+  # swagger_controller :api, 'Api'
+
+  # swagger_api :login do
+  #   summary 'Registra la entrada de un usuario'
+  #   notes 'Esta accion solo la puede realizar los administradores'
+  # end
   # @return [json]
   def login
     @log = Log.new(date: Date.today, timein: Time.current, user_id: param_user.id, created_by: @current_user.id)
@@ -19,6 +25,8 @@ class ApiController < ApplicationController
     if @log
       @log.timeout = Time.current
       if @log.save
+        puts "log out funciona correctamente"
+        p @log
         render json: @log, status: 200
       else
         render json: { errors: @log.errors.full_messages },
@@ -29,7 +37,7 @@ class ApiController < ApplicationController
     render json: { errors: 'user did not logged before', status: 412 }
   end
 
-  def userlogs
+  def user_logs
     if params[:user_id]
       start_date = Date.new
       start_date = params[:start_date].to_date if params[:start_date]
@@ -40,16 +48,19 @@ class ApiController < ApplicationController
     render 'api/logs.json'
   end
 
-  def logedusers
-    @logs = Log.includes(:user).where(date: Date.today)
+  def logged_users
+    @logs = Log.includes(:user).where(date: Date.today).where(timeout:nil)
     render 'api/user_log.json'
   end
 
-  def notlogedusers
+  def not_logged_users
     @users = User.where.not(id: Log.select(:user_id).where(date: Date.today))
     render 'api/users.json'
   end
-
+  def day_logged_users
+    @logs = Log.includes(:user).where(date: Date.today).where.not(timeout:nil)
+    render 'api/user_log.json'
+  end
   def users
     @users = User.includes(:logs).all
     render 'api/users.json'
@@ -66,6 +77,7 @@ class ApiController < ApplicationController
   end
 
   # @return [bool]
+
   def validate_admin
     if @current_user.nil? || !@current_user.isadmin
       return render json: { error: 'Not Authorized' }, status: 401 unless @current_user.isadmin
