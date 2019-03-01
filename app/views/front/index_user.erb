@@ -1,0 +1,148 @@
+<!-- Header -->
+<header class="navbar main-header">
+  <a class="navbar-brand" href="index.html">
+    Runa
+  </a>
+
+  <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user_name %></a>
+      <ul class="dropdown-menu">
+        <li><a href="#"><i class="fa fa-bar-chart-o"></i> Reportes</a></li>
+        <li><a href="#"><i class="fa fa-user"></i> Perfil</a></li>
+        <li><a href="#" id="logout"><i class="fa fa-share"></i> Salir</a></li>
+      </ul>
+    </li>
+  </ul>
+</header>
+
+
+<div class="sidebar sidebar-left">
+  <div class="content">
+    <div class="tab-content sidetabs">
+      <div class="tab-pane active" id="home">
+        <ul class="sidemenu">
+
+          <li>
+            <a href="javascript:void(0);">
+              <span class="icon"><i class="fa fa-bar-chart-o"></i></span>
+              <span class="name">Reportes</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Header -->
+
+<section id="main-wrapper">
+  <h3 class="subtitle">Reportes</h3>
+  <hr/>
+ <div class="dashboard_content">
+    <div class="row">
+      <div class="col-sm-9" id="reports">
+
+      </div>
+
+      <div class="col-sm-3">
+
+        <div class="tile purple-tile">
+          <div class="main-icon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <h4 class="white">Friday, Aug 13</h4>
+        </div>
+
+        <div class="tile green-tile">
+          <div class="main-icon">
+            <i class="fa fa-clock-o"></i>
+          </div>
+          <h4 class="white">04:00 PM</h4>
+        </div>
+
+      </div>
+    </div>
+
+
+ </div>
+
+
+</section>
+
+<script>
+  $(function(){
+
+      $('#logout').click(removeUserToken);
+      $.ajax({
+          url: routes["my_reports"],
+          type: "GET",
+          beforeSend: function (xhr) {
+              xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
+          },
+          complete: function (data) {
+              var content = data.responseJSON;
+              console.log(content);
+              var table_content = ``;
+              $.each(content, function (i, val) {
+
+                  var result = `<tr><th>Fecha</th><th>Entrada</th><th>Salida</th></tr>`;
+                  $.each(val.result,function(j,report_row){
+                      result += `<tr><td>${report_row.date}</td><td>${getTimeFromString(report_row.timein)}</td><td>${getTimeFromString(report_row.timeout)}</td></tr>`
+                  })
+                  table_content += `<tr id="user_${val.user_id}"><td>${val.user_name}</td><td>${val.date}</td><td>${val.from}</td><td>${val.to}</td>
+                    <td><a href="#expand" class="expand_report btn btn-info" data-result="report_row_${val.id}">+</a></td>
+                    </tr>
+                    <tr class="report_row" id="report_row_${val.id}"><td colspan="5"><div class="report_result" >
+                    <table class="table">${result}</table>
+                    </div></td> </tr>
+`;
+              });
+              var userTable = `
+                <table class="table">
+                <thead><th>usuario</th><th>Fecha</th><th>Desde</th><th>Hasta</th><th>Accion</th></thead>
+                <tbody id="users_body">${table_content}</tbody>
+                </table>
+                <br>
+                <div class="btn btn-info" id="add_report"> Crear Reporte </div>
+                ${report_form}
+            `;
+
+              $(".dashboard_content").html(userTable);
+              var dialog = $("#report-form").dialog({
+                  autoOpen: false,
+                  height: 400,
+                  width: 350,
+                  modal: true,
+                  buttons:
+                      [
+                          {
+                              text: "Submit",
+                              "class": 'btn btn-info',
+                              click: function () {
+                                  addReport();
+                                  $(this).dialog("close");
+                              }
+                          },
+                          {
+                              text: "Cancel",
+                              "class": 'btn btn-default',
+                              click: function () {
+                                  $(this).dialog("close");
+                              }
+                          }
+                      ]
+              });
+              $("#add_report").click(function(){
+                  dialog.dialog( "open" );
+              });
+              $(".expand_report").click(function(){
+                  var row = $(this).data("result");
+                  $(`#${row}`).toggle();
+                  $(this).html($(this).html()=="-"?"+":"-");
+              });
+              $(".report_row").toggle();
+          }});
+  });
+</script>
+

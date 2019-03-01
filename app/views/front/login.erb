@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Marktdaten</title>
+  <title>Runa-test</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= stylesheet_link_tag 'font-awesome.min', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <link href="https://runahr.com/wp-content/themes/runa-theme-2019/assets/img/favicon.png" rel="shortcut icon" />
   <style>
     @font-face{
       font-family:'RopaSans';
@@ -62,15 +63,22 @@
 
 </div>
 <script>
+  //DEFINIENDO LAS URL A USAR DE LA API
     var routes = [];
     routes["login"] = "<%=auth_login_path %>";
+    routes["my_reports"] = "<%=api_my_reports_url %>";
     routes["index"] = "<%=index_url %>";
     routes["users"] = "<%=api_users_path %>";
+    routes["remove_user"] = "api/remove_user/";
     routes["create"] = "<%=auth_create_url %>";
     routes["loggedUsers"] = "<%=api_logged_users_url%>";
     routes["notLoggedUsers"] = "<%=api_not_logged_users_url%>";
     routes["dayLoggedUsers"] = "<%=api_day_logged_users_url%>";
     routes["api_login"] = "api/login/";
+    routes["api_reports"] = "<%=api_reports_url%>";
+    routes["save_report"] = "<%=api_save_report_url%>";
+    routes["user_reports"] = "<%=api_get_user_reports_url%>";
+    routes["api_logout"] = "api/logout/";
     routes["api_logout"] = "api/logout/";
 
   $(function(){
@@ -80,12 +88,11 @@
       }).ajaxStop(function () {
           $(".spinner").hide();
       });
-      //if all ready logged in then load dashboard
+      //SI YA INICIO SESION ABRIR DIRECTO EL DASHBOARD
       if(sessionStorage.getItem("auth_token")){
-
           loadIndex("#content");
       }
-      //login using auth/login to get jwt
+      //iniciando sesion usando auth/login para obtener jwt
       $("#id_submit").click(function(){
           var email = $("#id_username").val();
           var password = $("#id_password").val();

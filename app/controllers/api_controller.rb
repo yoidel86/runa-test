@@ -1,6 +1,6 @@
 # controller class to serve as api
 class ApiController < ApplicationController
-  before_action :validate_admin
+  before_action :validate_admin, except: :my_reports
 
   # swagger_controller :api, 'Api'
 
@@ -66,7 +66,7 @@ class ApiController < ApplicationController
   end
   def save_report
     @logs = param_user.logs.where(date: params[:start_date].to_date..params[:end_date].to_date) unless param_user.nil?
-    @report = Reporte.create(date:Date.today,user_id:param_user.id,from:params[:start_date],to:params[:end_date],result:@logs.as_json)
+    @report = Reporte.create(generated_by:@current_user.id,date:Date.today,user_id:param_user.id,from:params[:start_date],to:params[:end_date],result:@logs.as_json)
     if @report.save
       return render 'api/report.json'
     else
@@ -77,6 +77,22 @@ class ApiController < ApplicationController
     @reports =param_user.reportes
     render json:@reports
   end
+
+  def reports
+    @reports =Reporte.includes(:user).all
+    render 'api/reports.json'
+  end
+  def remove_user
+    if param_user
+      param_user.destroy
+      render json:"{success:true}"
+    end
+
+  end
+  def my_reports
+    @reports =@current_user.reportes
+    render json:@reports
+  end
   private
   def param_user
     if params[:user_id]
@@ -84,6 +100,7 @@ class ApiController < ApplicationController
       return user unless user.nil?
     end
     render json: { errors: 'user not found', status: 412 }
+    return false
   end
 
   # @return [bool]

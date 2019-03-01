@@ -5,6 +5,9 @@ class FrontController < ActionController::Base
 
   def index
     @user_name = @current_user.name
+    if !@current_user.isadmin
+     return render 'front/index_user'
+    end
   end
 
   def login; end

@@ -10,7 +10,23 @@ RSpec.describe FrontController, type: :request do
     end
   end
   describe 'GET #index after login' do
+
     before { post '/auth/login', params: { 'email' => user.email, 'password' => user.password } }
+    let!(:token) { json['auth_token'] }
+    it 'returns http success' do
+      get "/index", headers: {
+          'Authorization' => token.to_s
+      }
+      expect(response).to have_http_status(:success)
+    end
+  end
+  describe 'GET #index after login as user' do
+
+    before {
+      user.isadmin = false
+      user.save
+      post '/auth/login', params: { 'email' => user.email, 'password' => user.password }
+    }
     let!(:token) { json['auth_token'] }
     it 'returns http success' do
       get "/index", headers: {

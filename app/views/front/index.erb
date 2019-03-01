@@ -10,7 +10,7 @@
       <ul class="dropdown-menu">
         <li><a href="#"><i class="fa fa-bar-chart-o"></i> Reportes</a></li>
         <li><a href="#"><i class="fa fa-user"></i> Perfil</a></li>
-        <li><a href="#"><i class="fa fa-share"></i> Salir</a></li>
+        <li><a href="#" id="logout"><i class="fa fa-share"></i> Salir</a></li>
       </ul>
     </li>
   </ul>
@@ -38,7 +38,7 @@
 
           </li>
           <li>
-            <a href="javascript:void(0);">
+            <a href="#" id="reportes">
               <span class="icon"><i class="fa fa-bar-chart-o"></i></span>
               <span class="name">Reportes</span>
             </a>
@@ -250,6 +250,8 @@
       loadCharts();
       $("#load_users").click(loadUsers);
       $("#entrada_salida").click(loadLoginLogoutView);
+      $('#logout').click(removeUserToken);
+      $("#reportes").click(generateReportView);
   })
 </script>
 
