@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>ApiController</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
+<script src="../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="ApiController">
+
+  
+    
+    <meta name="description" content="controller class to serve as api.">
+    <meta property="og:description" content="controller class to serve as api.">
+  
+
+    <meta name="keywords" content="ApiController class">
+  
+    <meta name="keywords" content="login, logout, userlogs, logedusers, notlogedusers, users">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            ApiController
+            
+                <span class="parent">&lt;
+                    
+                    <a href="ApplicationController.html">ApplicationController</a>
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../files/app/controllers/api_controller_rb.html">app/controllers/api_controller.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+    <div class="description">
+      
+<p>controller class to serve as api</p>
+
+    </div>
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>L</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-logedusers">logedusers</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-login">login</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-logout">logout</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-notlogedusers">notlogedusers</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>U</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-userlogs">userlogs</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-users">users</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+    
+      <div class="sectiontitle">Instance Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-i-logedusers">
+            
+              <b>logedusers</b>()
+            
+            <a href="../classes/ApiController.html#method-i-logedusers" name="method-i-logedusers" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-logedusers_source')" id="l_method-i-logedusers_source">show</a>
+                
+              </p>
+              <div id="method-i-logedusers_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File app/controllers/api_controller.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">logedusers</span>
+  <span class="ruby-ivar">@logs</span> = <span class="ruby-constant">Log</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">date:</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>)
+  <span class="ruby-identifier">render</span> <span class="ruby-string">&#39;api/user_log.json&#39;</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-login">
+            
+              <b>login</b>()
+            
+            <a href="../classes/ApiController.html#method-i-login" name="method-i-login" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>@return [json]</p>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-login_source')" id="l_method-i-login_source">show</a>
+                
+              </p>
+              <div id="method-i-login_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File app/controllers/api_controller.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">login</span>
+  <span class="ruby-ivar">@log</span> = <span class="ruby-constant">Log</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">date:</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>, <span class="ruby-value">timein:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>, <span class="ruby-value">user_id:</span> <span class="ruby-identifier">param_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-value">created_by:</span> <span class="ruby-ivar">@current_user</span>.<span class="ruby-identifier">id</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">save</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-value">json:</span> <span class="ruby-ivar">@log</span>, <span class="ruby-value">status:</span> <span class="ruby-value">:created</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-value">json:</span> { <span class="ruby-value">errors:</span> <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span> },
+           <span class="ruby-value">status:</span> <span class="ruby-value">:unprocessable_entity</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-logout">
+            
+              <b>logout</b>()
+            
+            <a href="../classes/ApiController.html#method-i-logout" name="method-i-logout" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>@return [json]</p>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-logout_source')" id="l_method-i-logout_source">show</a>
+                
+              </p>
+              <div id="method-i-logout_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File app/controllers/api_controller.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">logout</span>
+  <span class="ruby-ivar">@log</span> = <span class="ruby-identifier">param_user</span>.<span class="ruby-identifier">logs</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:log_id</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@log</span>
+    <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">timeout</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">save</span>
+      <span class="ruby-identifier">render</span> <span class="ruby-value">json:</span> <span class="ruby-ivar">@log</span>, <span class="ruby-value">status:</span> <span class="ruby-value">200</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">render</span> <span class="ruby-value">json:</span> { <span class="ruby-value">errors:</span> <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span> },
+             <span class="ruby-value">status:</span> <span class="ruby-value">:unprocessable_entity</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">render</span> <span class="ruby-value">json:</span> { <span class="ruby-value">errors:</span> <span class="ruby-string">&#39;user did not logged before&#39;</span>, <span class="ruby-value">status:</span> <span class="ruby-value">412</span> }
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-notlogedusers">
+            
+              <b>notlogedusers</b>()
+            
+            <a href="../classes/ApiController.html#method-i-notlogedusers" name="method-i-notlogedusers" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-notlogedusers_source')" id="l_method-i-notlogedusers_source">show</a>
+                
+              </p>
+              <div id="method-i-notlogedusers_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File app/controllers/api_controller.rb, line 54</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">notlogedusers</span>
+  <span class="ruby-ivar">@users</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">where</span>.<span class="ruby-identifier">not</span>(<span class="ruby-value">id:</span> <span class="ruby-constant">Log</span>.<span class="ruby-identifier">select</span>(<span class="ruby-value">:user_id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">date:</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>))
+  <span class="ruby-identifier">render</span> <span class="ruby-string">&#39;api/users.json&#39;</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-userlogs">
+            
+              <b>userlogs</b>()
+            
+            <a href="../classes/ApiController.html#method-i-userlogs" name="method-i-userlogs" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-userlogs_source')" id="l_method-i-userlogs_source">show</a>
+                
+              </p>
+              <div id="method-i-userlogs_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File app/controllers/api_controller.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">userlogs</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>]
+    <span class="ruby-identifier">start_date</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">start_date</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:start_date</span>].<span class="ruby-identifier">to_date</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:start_date</span>]
+    <span class="ruby-identifier">end_date</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">tomorrow</span>
+    <span class="ruby-identifier">end_date</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:end_date</span>].<span class="ruby-identifier">to_date</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:end_date</span>]
+    <span class="ruby-ivar">@logs</span> = <span class="ruby-identifier">param_user</span>.<span class="ruby-identifier">logs</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">date:</span> <span class="ruby-identifier">start_date</span><span class="ruby-operator">..</span><span class="ruby-identifier">end_date</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">param_user</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">render</span> <span class="ruby-string">&#39;api/logs.json&#39;</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-users">
+            
+              <b>users</b>()
+            
+            <a href="../classes/ApiController.html#method-i-users" name="method-i-users" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-users_source')" id="l_method-i-users_source">show</a>
+                
+              </p>
+              <div id="method-i-users_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File app/controllers/api_controller.rb, line 59</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">users</span>
+  <span class="ruby-ivar">@users</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:logs</span>).<span class="ruby-identifier">all</span>
+  <span class="ruby-identifier">render</span> <span class="ruby-string">&#39;api/users.json&#39;</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>
