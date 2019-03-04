@@ -35,7 +35,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'simple_command'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'apipie-rails'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rails_best_practices'
   gem 'rspec-rails', '~> 3.5'
