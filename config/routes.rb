@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root "front#login"
+  get "/"=>"front#login"
   get 'api/login/:user_id'=>"api#login"
   get 'api/logout/:user_id/:log_id'=>"api#logout"
   get 'api/user_logs/:user_id'=>"api#user_logs"
@@ -16,7 +18,7 @@ Rails.application.routes.draw do
   get 'index'=>"front#index"
   get 'login'=>"front#login"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root "front#login"
+
   post 'auth/login', to: 'authentication#authenticate'
   post 'auth/create', to: 'authentication#create'
 
