@@ -17,6 +17,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+
   username: postgres
   password: postgres
   # For details on connection pooling, see Rails configuration guide
@@ -82,6 +83,9 @@ test:
 #
 production:
   <<: *default
-  database: Runa_production
-  username: Runa
-  password: <%= ENV['RUNA_DATABASE_PASSWORD'] %>
+  host: ec2-54-243-223-245.compute-1.amazonaws.com
+  database: d7nnnnhedhtlev
+  username: jwmuwnfsamiivb
+  port: 5432
+  password: f4975501003e4d8992a59fd73af60b358425583f5782bed183a4675379047702
+#  password: <%= ENV['RUNA_DATABASE_PASSWORD'] %>
