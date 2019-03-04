@@ -40,7 +40,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.5'
   gem 'rubocop', git: 'https://github.com/rubocop-hq/rubocop.git', require: false
   gem 'sdoc'
-  gem 'swagger-docs'
   # gem 'rspec_api_documentation'
 end
 
