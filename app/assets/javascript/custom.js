@@ -1,3 +1,10 @@
+/***
+ * Capa cliente encargada de ejecutar la interaccion del usuario con la api de Runa-test
+ * utiliza las rutas especificadas previamente en la en la variable routes[]
+ * @type {string}
+ */
+
+
 var dialog_form = `<div id="dialog-form" title="Crear nuevo usuario">
                   <p class="validateTips">Todos son requeridos.</p>
                   <form>
@@ -80,7 +87,7 @@ function loadUsers(){
                 var table_content = ``;
                 $.each(content.users, function (i, val) {
                     table_content += `<tr id="user_${val.id}"><td>${val.name}</td><td>${val.email}</td>
-                    <td><a href="#delete" class="remove" data-id="${val.id}">X</a></td>
+                    <td><a href="#delete" class="remove" data-id="${val.id}"><i class="fa fa-trash-o"></i></a></td>
                     </tr>`;
                 });
                 var userTable = `
@@ -129,7 +136,9 @@ function loadUsers(){
                     dialog.dialog("open");
                 })
                 $(".remove").click(function () {
-                    removeUser($(this).data("id"));
+                    if(confirm("¿Estas seguro que desea borrar el usuario?")){
+                        removeUser($(this).data("id"));
+                    }
                 })
             }
         }
@@ -163,47 +172,66 @@ function addUser(){
 }
 //dashboard view
 function loadCharts(){
-    console.log("ESTO NO SE LLAMA NUNCA");
 
-    $('#chart1').easyPieChart({
-        size:180,
-        barColor:'#3ba0ff',
-        lineWidth:5,
-    });
-
-    $('#chart2').easyPieChart({
-        size:180,
-        barColor:'#57BE85',
-        lineWidth:5,
-    });
-
-    $('#chart3').easyPieChart({
-        size:180,
-        barColor:'#ff6c60',
-        lineWidth:5,
-    });
-
-    window.chart = c3.generate({
-        bindto: '#spline-chart',
-        data: {
-            columns: [
-                ['Speed', 210, 170, 145, 200, 220, 210],
-                ['Time', 130, 100, 130, 180, 150, 50],
-                ['Visitors', 80, 110, 70, 150, 110, 140],
-            ],
-            types: {
-                Speed: 'area-spline',
-                Time: 'spline',
-                Visitors:'area-spline'
-            }
+    $.ajax({
+        url: routes["dashboard"],
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
         },
-        color: {
-            pattern: ['#57BE85','#ff6c60','#3ba0ff']
-        },
-        size: {
-            height: 300
-        },
+        complete: function (datar) {
+            console.log(datar);
+            $('#chart1').attr('data-percent',(datar.responseJSON.dashboard.today*1).toFixed(2));
+            $('#chart1_text').html((datar.responseJSON.dashboard.today*1).toFixed(2));
+            $('#chart1').easyPieChart({
+                size: 180,
+                barColor: '#3ba0ff',
+                lineWidth: 5,
+            });
+            var registros_bien = datar.responseJSON.dashboard.in_with_out*100.0/datar.responseJSON.dashboard.total*1
+            var registros_mal = datar.responseJSON.dashboard.in_not_out*100.0/datar.responseJSON.dashboard.total*1
+            $('#chart2').attr('data-percent',(registros_bien).toFixed(2));
+            $('#chart2_text').html(registros_bien.toFixed(2));
+            $('#chart3').attr('data-percent',(registros_mal).toFixed(2));
+            $('#chart3_text').html(registros_mal.toFixed(2));
+            $('#chart2').easyPieChart({
+                size: 180,
+                barColor: '#57BE85',
+                lineWidth: 5,
+            });
+
+            $('#chart3').easyPieChart({
+                size: 180,
+                barColor: '#ff6c60',
+                lineWidth: 5,
+            });
+
+            window.chart = c3.generate({
+                bindto: '#spline-chart',
+                data: {
+                    columns: [
+                        ['Speed', 210, 170, 145, 200, 220, 210],
+                        ['Time', 130, 100, 130, 180, 150, 50],
+                        ['Visitors', 80, 110, 70, 150, 110, 140],
+                    ],
+                    types: {
+                        Speed: 'area-spline',
+                        Time: 'spline',
+                        Visitors: 'area-spline'
+                    }
+                },
+                color: {
+                    pattern: ['#57BE85', '#ff6c60', '#3ba0ff']
+                },
+                size: {
+                    height: 300
+                },
+            });
+        }
     });
+    var date= new Date();
+    $(".date-widget").html(date.toLocaleDateString())
+    $(".time-widget").html(date.toLocaleTimeString())
 }
 //login-logout view
 function loadLoginLogoutView(){
@@ -382,8 +410,10 @@ function generateReportView(){
                         $.each(val.result,function(j,report_row){
                             result += `<tr><td>${report_row.date}</td><td>${getTimeFromString(report_row.timein)}</td><td>${getTimeFromString(report_row.timeout)}</td></tr>`
                         })
-                table_content += `<tr id="user_${val.user_id}"><td>${val.user_name}</td><td>${val.date}</td><td>${val.from}</td><td>${val.to}</td>
-                    <td><a href="#expand" class="expand_report btn btn-info" data-result="report_row_${val.id}">+</a></td>
+                table_content += `<tr id="user_${val.user_id}">
+                    <td><a href="#expand" class="remove_report btn" data-report="${val.id}"><i class="fa fa-trash-o"></i></a></td>
+                    <td>${val.user_name}</td><td>${val.date}</td><td>${val.from}</td><td>${val.to}</td>
+                    <td><a href="#expand" class="expand_report btn" data-result="report_row_${val.id}"><i class="fa fa-plus"></i></a></td>
                     </tr>
                     <tr class="report_row" id="report_row_${val.id}"><td colspan="5"><div class="report_result" >
                     <table class="table">${result}</table>
@@ -392,7 +422,7 @@ function generateReportView(){
             });
             var userTable = `
                 <table class="table">
-                <thead><th>usuario</th><th>Fecha</th><th>Desde</th><th>Hasta</th><th>Accion</th></thead>
+                <thead><th width="20px"></th><th>usuario</th><th>Fecha</th><th>Desde</th><th>Hasta</th><th>Accion</th></thead>
                 <tbody id="users_body">${table_content}</tbody>
                 </table>
                 <br>
@@ -431,8 +461,13 @@ function generateReportView(){
             $(".expand_report").click(function(){
                 var row = $(this).data("result");
                 $(`#${row}`).toggle();
-                $(this).html($(this).html()=="-"?"+":"-");
+                $(this).html($(this).html()=="<i class=\"fa fa-minus\"></i>"?"<i class=\"fa fa-plus\"></i>":"<i class=\"fa fa-minus\"></i>");
             });
+            $(".remove_report").click(function () {
+                if(confirm("¿Seguro que desea eliminar este reporte?")){
+                    removeReport($(this).data('report'));
+                }
+            })
             $.ajax({
                 url: routes["users"],
                 type: "GET",
@@ -467,6 +502,20 @@ function getTimeFromString(str){
     }
        return "--:--"
 }
+
+function removeReport(report_id){
+    $.ajax({
+        url: `${routes["remove_report"]}${report_id}`,
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", sessionStorage.getItem("auth_token"))
+        },
+        complete: function (content) {
+            generateReportView();
+        }
+    });
+}
+
 function addReport() {
     var user_id = $("#user_id").val();
     var from = $("#from").val();

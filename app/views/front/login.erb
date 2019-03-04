@@ -79,8 +79,9 @@
     routes["save_report"] = "<%=api_save_report_url%>";
     routes["user_reports"] = "<%=api_get_user_reports_url%>";
     routes["api_logout"] = "api/logout/";
-    routes["api_logout"] = "api/logout/";
-
+  routes["api_logout"] = "api/logout/";
+  routes["remove_report"] = "api/remove_report/";
+  routes["dashboard"] = "<%= api_dashboard_url %>";
   $(function(){
       $(".spinner").hide();
       $(document).ajaxStart(function () {

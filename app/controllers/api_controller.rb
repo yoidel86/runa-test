@@ -1,14 +1,13 @@
-# controller class to serve as api
+##
+# Controladora encargada de manejar las peticiones de la Api de la aplicacion
+# para poder responder las peticiones el usuario debera estar autenticado
+# y para todas las peticiones verificara que es administrador exceptuando para la
+# peticion api/my_reports que retornara los reportes de los usuarios no administradores
 class ApiController < ApplicationController
-  before_action :validate_admin, except: :my_reports
-
-  # swagger_controller :api, 'Api'
-
-  # swagger_api :login do
-  #   summary 'Registra la entrada de un usuario'
-  #   notes 'Esta accion solo la puede realizar los administradores'
-  # end
-  # @return [json]
+  before_action :validate_admin, except: [:my_reports,:save_report]
+  ##
+  # Endpoint encargado de registrar la entrada de un usuario por parte de un administrador
+  # @return [json] con la informacion del registro actual, de ser invalido el registro retorna el error causado
   def login
     @log = Log.new(date: Date.today, timein: Time.current, user_id: param_user.id, created_by: @current_user.id)
     if @log.save
@@ -19,7 +18,9 @@ class ApiController < ApplicationController
     end
   end
 
-  # @return [json]
+  ##
+  # Endpoint encargado de registrar la salida de un usuario por parte de un administrador
+  # @return [json] con la informacion del registro actual, de ser invalido el registro retorna el error causado
   def logout
     @log = param_user.logs.find(params[:log_id])
     if @log
@@ -34,14 +35,16 @@ class ApiController < ApplicationController
     end
     render json: { errors: 'user did not logged before', status: 412 }
   end
-
+  ##
+  # Endpoint encargado de retornar los logs de un usuario especifico solicitado por un administrador
+  # @params [user_id[,start_date,end_date]]
+  # @return [json] con los registros de usuario en el intervalo especifico, de ser invalido el registro retorna el error causado
   def user_logs
     if params[:user_id]
       start_date = Date.new
       start_date = params[:start_date].to_date if params[:start_date]
       end_date = Date.tomorrow
       end_date = params[:end_date].to_date if params[:end_date]
-
       @logs = param_user.logs.where(date: start_date..end_date) unless param_user.nil?
     end
     render 'api/logs.json'
@@ -65,8 +68,13 @@ class ApiController < ApplicationController
     render 'api/users.json'
   end
   def save_report
-    @logs = param_user.logs.where(date: params[:start_date].to_date..params[:end_date].to_date) unless param_user.nil?
-    @report = Reporte.create(generated_by:@current_user.id,date:Date.today,user_id:param_user.id,from:params[:start_date],to:params[:end_date],result:@logs.as_json)
+    if @current_user.isadmin
+      @logs = param_user.logs.where(date: params[:start_date].to_date..params[:end_date].to_date) unless param_user.nil?
+      @report = Reporte.create(generated_by:@current_user.id,date:Date.today,user_id:param_user.id,from:params[:start_date],to:params[:end_date],result:@logs.as_json)
+    else
+      @logs = @current_user.logs.where(date: params[:start_date].to_date..params[:end_date].to_date)
+      @report = Reporte.create(generated_by:@current_user.id,date:Date.today,user_id:@current_user.id,from:params[:start_date],to:params[:end_date],result:@logs.as_json)
+    end
     if @report.save
       return render 'api/report.json'
     else
@@ -77,21 +85,40 @@ class ApiController < ApplicationController
     @reports =param_user.reportes
     render json:@reports
   end
-
   def reports
     @reports =Reporte.includes(:user).all
     render 'api/reports.json'
+  end
+  def remove_report
+    if params[:report_id]
+      report  = Reporte.find(params[:report_id])
+      if report
+        report.destroy
+        return render json: "{success:true}",status: 200
+      end
+    end
+      render json: "{errors:'reporte no encontrado'}",status: 412
   end
   def remove_user
     if param_user
       param_user.destroy
       render json:"{success:true}"
     end
-
   end
   def my_reports
     @reports =@current_user.reportes
     render json:@reports
+  end
+
+
+  def dashboard
+    @total_logs = Log.all.count
+    @logs_in_not_out = Log.where.not(timein: nil).where(timeout:nil).count
+    @logs_today = Log.where(date: Date.today).count*100.0/User.all.count
+    @logs_users = User.all.count
+    @logs_in_and_out = Log.where.not(timein: nil).where.not(timeout:nil).count
+    @logs_by_user = Log.select(:user_id,'count(*)').group(:user_id).as_json
+    render 'api/dashboard'
   end
   private
   def param_user

@@ -6,12 +6,14 @@ Rails.application.routes.draw do
   get 'api/user_logs/:user_id'=>"api#user_logs"
   get 'api/users'
   get 'api/remove_user/:user_id'=>"api#remove_user"
+  get 'api/remove_report/:report_id'=>"api#remove_report"
   get 'api/not_logged_users'
   get 'api/logged_users'
   get 'api/day_logged_users'
   get 'api/get_user_reports'
   get 'api/reports'
   get 'api/my_reports'
+  get 'api/dashboard'
   post 'api/save_report'
   get 'index'=>"front#index"
   get 'login'=>"front#login"
