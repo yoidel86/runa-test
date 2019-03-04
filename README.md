@@ -14,8 +14,15 @@ Consideraciones:
 - Usar PostgreSQL
 - Aplicar Unit testing o testing funcional
 - El criterio del postulante será el punto más importante a evaluar.
-##prove of work: 
+##Testing Online: 
 ###authentication:
 
     curl -H "Content-Type: application/json" -X POST -d "{\"email\":\"example@mail.com\",\"password\":\"123123123\"}" http://localhost:3000/authenticate
-rails generate model Reporte user:references generated_by:integeger date:date from:date to:date result:json
+
+Se puede probar el sistema en la url:
+
+https://runa-test.herokuapp.com/
+
+usuario:example@mail.com
+password:123123123
+
