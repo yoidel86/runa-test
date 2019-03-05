@@ -1,4 +1,4 @@
-# class to inherit on app to ensure authentication on api calls
+# class para ser heredada que asegure la autorización y/o autenticación de la petición
 class ApplicationController < ActionController::API
   before_action :authenticate_request
   attr_reader :current_user

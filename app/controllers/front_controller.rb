@@ -1,3 +1,5 @@
+##
+# Controladora para funcionar como cliente de la api
 class FrontController < ActionController::Base
   before_action :authenticate_request
   skip_before_action :authenticate_request, only: [:login]

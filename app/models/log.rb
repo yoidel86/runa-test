@@ -1,4 +1,4 @@
-# model for log user in and out
+# model para registrar entrada y salida de usuarios
 class Log < ApplicationRecord
   # model association
   belongs_to :user

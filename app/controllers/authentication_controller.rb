@@ -1,4 +1,4 @@
-# controller to authenticate an create users on api
+# controladora encargada de autenticar y crear nuevos usuarios en el sistema
 class AuthenticationController < ApplicationController
   skip_before_action :authenticate_request
 

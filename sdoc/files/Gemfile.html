@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Gemfile</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
+<script src="../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            Gemfile
+        </h1>
+        <ul class="files">
+            <li>Gemfile</li>
+            <li>Last modified: 2019-03-04 12:25:03 -0500</li>
+        </ul>
+    </div>
+
+    <div id="bodyContent">
+        <div id="content">
+  
+    <div class="description">
+      
+<p>source &#39;<a href="https://rubygems.org">rubygems.org</a>&#39;</p>
+
+<p>git_source(:github) do |repo_name|</p>
+
+<pre><code>repo_name = &quot;#{repo_name}/#{repo_name}&quot; unless repo_name.include?(&#39;/&#39;)
+&quot;https://github.com/#{repo_name}.git&quot;
+</code></pre>
+
+<p>end # Bundle edge Rails instead: gem &#39;rails&#39;, github: &#39;rails/rails&#39; gem &#39;rails&#39;, &#39;~&gt; 5.1.3&#39; # Use postgresql as the database for Active Record gem &#39;pg&#39;, &#39;~&gt; 0.18&#39; # Use Puma as the app server gem &#39;puma&#39;, &#39;~&gt; 3.7&#39; # Build JSON APIs with ease. Read more: <a href="https://github.com/rails/jbuilder">github.com/rails/jbuilder</a> gem &#39;jbuilder&#39;, &#39;~&gt; 2.5&#39; # Use Redis adapter to run Action Cable in production # gem &#39;redis&#39;, &#39;~&gt; 3.0&#39; # Use ActiveModel has_secure_password gem &#39;bcrypt&#39;, &#39;~&gt; 3.1.7&#39;</p>
+
+<p># Use Capistrano for deployment # gem &#39;capistrano-rails&#39;, group: :development</p>
+
+<p># Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible gem &#39;rack-cors&#39; # Using JWT for Json Web Token gem &#39;jwt&#39;</p>
+
+<p># Using Jquery to client gem &#39;jquery-rails&#39; gem &#39;jquery-turbolinks&#39; gem &#39;jquery-ui-rails&#39; # Using sass gem &#39;sass-rails&#39;, &#39;~&gt; 5.0&#39; # using Commands gem &#39;simple_command&#39; group :development, :test do</p>
+
+<pre><code># Call &#39;byebug&#39; anywhere in the code to stop execution and get a debugger console
+gem &#39;byebug&#39;, platforms: %i[mri mingw x64_mingw]
+gem &#39;rails_best_practices&#39;
+gem &#39;rspec-rails&#39;, &#39;~&gt; 3.5&#39;
+gem &#39;rubocop&#39;, git: &#39;https://github.com/rubocop-hq/rubocop.git&#39;, require: false
+gem &#39;sdoc&#39;
+# gem &#39;rspec_api_documentation&#39;
+</code></pre>
+
+<p>end</p>
+
+<p>group :test do</p>
+
+<pre><code>gem &#39;database_cleaner&#39;
+gem &#39;factory_bot_rails&#39;, &#39;~&gt; 4.0&#39;
+gem &#39;faker&#39;
+gem &#39;shoulda-matchers&#39;, &#39;~&gt; 3.1&#39;
+gem &#39;simplecov&#39;
+</code></pre>
+
+<p>end</p>
+
+<p># Windows does not include zoneinfo files, so bundle the tzinfo-data gem gem &#39;tzinfo-data&#39;, platforms: %i[mingw mswin x64_mingw jruby]</p>
+
+    </div>
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+    
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>
