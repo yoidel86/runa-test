@@ -22,102 +22,48 @@ RSpec.describe ApiController, type: :request do
       expect(response).to have_http_status(:success)
     end
   end
-  describe 'GET /api/user_logs/:id' do
-    it 'returns http success' do
-      get "/api/user_logs/#{user_id}", headers: {
-        'Authorization' => token.to_s
-      }
-      expect(response).to have_http_status(:success)
-    end
-  end
-  describe 'GET /api/not_logged_users/' do
-    before { get "/api/login/#{user_id}", headers: { 'Authorization' => token.to_s } }
-    it 'return all users not logedin' do
-      get '/api/not_logged_users/', headers: {
-        'Authorization' => token.to_s
-      }
-      expect(json['users'].size).to eq(4)
-      expect(response).to have_http_status(:success)
-    end
-  end
-  describe 'GET /api/logged_users/' do
-    before { get "/api/login/#{user_id}", headers: { 'Authorization' => token.to_s } }
-    it 'return all users not logedin' do
-      get '/api/logged_users/', headers: {
-        'Authorization' => token.to_s
-      }
-      expect(json['users'].size).to eq(1)
-      expect(response).to have_http_status(:success)
-    end
-  end
-  describe 'GET /api/day_logged_users/' do
-    before {
-      get "/api/login/#{user_id}", headers: { 'Authorization' => token.to_s }
-      log_id = json['id']
-      get "/api/logout/#{user_id}/#{log_id}", headers: { 'Authorization' => token.to_s }
-    }
-    it 'return all users not logedin' do
-      get '/api/day_logged_users/', headers: {
+  describe 'registrar la entrada de un usuario que no existe' do
+    it 'returns http user not found error 412 ' do
+      get "/api/login/999", headers: {
           'Authorization' => token.to_s
       }
-      expect(json['users'].size).to eq(1)
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(412)
     end
   end
-  describe 'GET save_report by user ' do
-    before {
-      # registrando login de usuario
-      get "/api/login/#{user_id}", headers: { 'Authorization' => token.to_s }
-      log_id = json['id']
-      # registrando logout de usuario
-      get "/api/logout/#{user_id}/#{log_id}", headers: { 'Authorization' => token.to_s }
-    }
+  describe 'registrar la entrada de un usuario sin autenticarse ' do
+    it 'returns http Unauthorized 401 ' do
+      get "/api/login/#{user_id}"
+      expect(response).to have_http_status(401)
+    end
+  end
 
-    it 'generated report fo user' do
-      date = Date.today
-      post "/api/save_report",params:{
-          user_id:user_id,
-          start_date:date-1.day,
-          end_date:date+1.day
-      }, headers: {
+  describe 'registrar la salida de un usuario sin id de entrada' do
+    it 'returns http 422' do
+      logid = 10
+      expect(response).to have_http_status(:success)
+      get "/api/logout/#{user_id}", headers: {
           'Authorization' => token.to_s
       }
-      expect(json['logs'].size).to eq(1)
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(422)
     end
+  end
 
-    it 'returns http success' do
-      expect(response).to have_http_status(:success)
-    end
-  end
-  describe 'get generate report' do
-    before {
-      get "/api/login/#{user_id}", headers: { 'Authorization' => token.to_s }
-      log_id = json['id']
-      date = Date.today
-      get "/api/logout/#{user_id}/#{log_id}", headers: { 'Authorization' => token.to_s }
-      post "/api/save_report",params:{ user_id:user_id, start_date: date-1.day, end_date: date+1.day }, headers: {
+  describe 'registrar la salida de usuario que ya salio' do
+    it 'returns http 422' do
+      get "/api/login/#{user_id}", headers: {
           'Authorization' => token.to_s
       }
-    }
-    it 'get generated report fo user #get_user_reports'  do
-      get "/api/get_user_reports",params:{
-          user_id:user_id
-      }, headers: {
+      logid = json['id']
+      expect(response).to have_http_status(:success)
+      get "/api/logout/#{user_id}/#{logid}", headers: {
           'Authorization' => token.to_s
       }
-      p json
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(200)
+      get "/api/logout/#{user_id}/#{logid}", headers: {
+          'Authorization' => token.to_s
+      }
+      expect(response).to have_http_status(422)
     end
   end
-  describe 'GET #users' do
-    before { get '/api/users.json', headers: { 'Authorization' => token.to_s } }
-    it 'returns report' do
-      expect(json).not_to be_empty
-      expect(json['users'].size).to eq(5)
-    end
-    it 'returns http success' do
-      expect(response).to have_http_status(:success)
-    end
-  end
+
 end

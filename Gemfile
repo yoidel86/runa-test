@@ -29,6 +29,7 @@ gem 'jwt'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'jquery-ui-rails'
+
 # Using sass
 gem 'sass-rails', '~> 5.0'
 # using Commands
